@@ -109,30 +109,28 @@ def ejecutar_test_individual(ejercicio_num):
     
     return result
 
-
 def ejecutar_todos_tests_html(directorio_salida='test_reports'):
     """
-    Ejecuta todos los tests y genera un reporte HTML.
-    
+    Ejecuta todos los tests y genera un reporte HTML confiable.
+
     Parameters
     ----------
     directorio_salida : str
         Directorio donde guardar el reporte HTML.
     """
-    # Crear directorio si no existe
+    import HtmlTestRunner
+
+    # Crear directorios si no existen
     os.makedirs(directorio_salida, exist_ok=True)
-    
-    # Crear directorio img si no existe (para evitar errores en tests)
     img_dir = os.path.join(parent_dir, 'img')
     os.makedirs(img_dir, exist_ok=True)
-    
+
     # Descubrir todos los tests
     loader = unittest.TestLoader()
     start_dir = os.path.dirname(__file__)
     suite = loader.discover(start_dir, pattern='test_ejercicio*.py')
-    
+
     try:
-        # Configurar el runner HTML
         runner = HtmlTestRunner.HTMLTestRunner(
             output=directorio_salida,
             report_name='PEC4_TestReport',
@@ -140,46 +138,37 @@ def ejecutar_todos_tests_html(directorio_salida='test_reports'):
             descriptions=True,
             verbosity=2,
             add_timestamp=True,
-            combine_reports=True  # Combinar todos los tests en un solo reporte
+            combine_reports=True
         )
-        
-        # Ejecutar tests
+
         print("\n" + "="*60)
-        print("EJECUTANDO TODOS LOS TESTS")
+        print("EJECUTANDO TODOS LOS TESTS (HTML)")
         print("="*60)
-        
+
         result = runner.run(suite)
-        
-        # Mostrar resumen
+
         print("\n" + "="*60)
         print("RESUMEN DE RESULTADOS")
         print("="*60)
-        print(f"Tests ejecutados: {result.testsRun}")
-        print(f"Exitosos: {result.testsRun - len(result.failures) - len(result.errors)}")
-        print(f"Fallos: {len(result.failures)}")
-        print(f"Errores: {len(result.errors)}")
-        
-        # Calcular puntuación global
-        puntuacion_total = 0
-        puntuacion_maxima = 50  # 10 puntos por ejercicio
-        
-        # Obtener puntuaciones de cada ejercicio
-        for i in range(1, 6):
-            try:
-                module_name = f'tests.test_ejercicio{i}'
-                test_module = sys.modules.get(module_name)
-                if test_module and hasattr(test_module, f'TestEjercicio{i}'):
-                    test_class = getattr(test_module, f'TestEjercicio{i}')
-                    if hasattr(test_class, 'score'):
-                        puntuacion_total += test_class.score
-            except:
-                pass
-        
+
+        total_tests = result.testsRun
+        total_failures = len(result.failures)
+        total_errors = len(result.errors)
+        passed_tests = total_tests - total_failures - total_errors
+
+        print(f"Tests ejecutados: {total_tests}")
+        print(f"Exitosos: {passed_tests}")
+        print(f"Fallos: {total_failures}")
+        print(f"Errores: {total_errors}")
+
+        # Calcular puntuación proporcional (basado en 50 puntos)
+        puntuacion_total = int((passed_tests / total_tests) * 50)
+        puntuacion_maxima = 50
         porcentaje = (puntuacion_total / puntuacion_maxima) * 100
-        
-        print(f"\nPUNTUACIÓN TOTAL: {puntuacion_total}/{puntuacion_maxima} ({porcentaje:.1f}%)")
-        
-        # Calcular nota
+
+        print(f"\nPUNTUACIÓN TOTAL ESTIMADA: {puntuacion_total}/{puntuacion_maxima} ({porcentaje:.1f}%)")
+
+        # Calificación aproximada
         if porcentaje >= 90:
             nota = "EXCELENTE (9-10)"
         elif porcentaje >= 80:
@@ -192,11 +181,11 @@ def ejecutar_todos_tests_html(directorio_salida='test_reports'):
             nota = "APROBADO (5-6)"
         else:
             nota = "SUSPENSO (<5)"
-        
-        print(f"CALIFICACIÓN: {nota}")
+
+        print(f"CALIFICACIÓN ESTIMADA: {nota}")
         print("="*60)
-        
-        # Abrir el reporte en el navegador
+
+        # Intentar abrir el reporte HTML
         report_path = os.path.join(os.path.abspath(directorio_salida), 'PEC4_TestReport.html')
         if os.path.exists(report_path):
             print(f"\n✓ Reporte HTML generado en: {report_path}")
@@ -204,17 +193,17 @@ def ejecutar_todos_tests_html(directorio_salida='test_reports'):
             webbrowser.open(f'file://{report_path}')
         else:
             print(f"\n⚠️  No se encontró el reporte en: {report_path}")
-        
+
         return result
-        
+
     except Exception as e:
         print(f"\n❌ Error durante la ejecución de tests: {e}")
-        print("\nEjecutando tests sin HTML...")
-        
-        # Fallback: ejecutar sin HTML
+        print("\nEjecutando tests sin HTML como fallback...")
+
         runner = unittest.TextTestRunner(verbosity=2)
         result = runner.run(suite)
         return result
+
 
 
 def ejecutar_todos_tests_simple():

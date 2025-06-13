@@ -185,3 +185,5 @@ coverage.xml
 doc/_build/
 doc/build/
 doc/source/_build/
+
+test_reports/
