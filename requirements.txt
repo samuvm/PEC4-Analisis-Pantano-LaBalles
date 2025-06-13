@@ -1,3 +1,11 @@
 pandas
 matplotlib
 scipy
+
+
+unittest2
+coverage
+html-testRunner
+pytest
+pytest-cov
+pytest-html

@@ -60,7 +60,8 @@ def calcula_periodos(df, umbral=60):
     # Crear lista de períodos
     periodos = []
     for inicio, fin in zip(inicios, finales):
-        periodos.append([round(inicio, 2), round(fin, 2)])
+        # Convertir a float nativo de Python para evitar np.float64
+        periodos.append([round(float(inicio), 2), round(float(fin), 2)])
     
     return periodos
 
