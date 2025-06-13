@@ -238,8 +238,8 @@ class TestEjercicio3(unittest.TestCase):
             self.__class__.test_results.append(("Generar imagen", False, 0))
             raise e
     
-    def test_07_ejecutar_ejercicio4_completo(self):
-        """Test 7: Verificar que ejecutar_ejercicio4 funciona completamente."""
+    def test_07_ejecutar_ejercicio3_completo(self):
+        """Test 7: Verificar que ejecutar_ejercicio3 funciona completamente."""
         try:
             from io import StringIO
             import sys
@@ -256,18 +256,16 @@ class TestEjercicio3(unittest.TestCase):
             # Verificaciones
             self.assertIsInstance(df_resultado, pd.DataFrame,
                                 "No devuelve un DataFrame")
-            self.assertIn('nivell_perc_suavizado', df_resultado.columns,
-                        "No se creó la columna suavizada")
-            self.assertIn("EJERCICIO 4", output,
+            self.assertIn('dia_decimal', df_resultado.columns,
+                        "No se creó la columna dia_decimal")
+            self.assertIn("EJERCICIO 3", output,
                         "No imprime el título del ejercicio")
             
-            # Verificar que se generó imagen en el directorio img real
-            img_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'img')
-            if os.path.exists(img_dir):
-                img_files = os.listdir(img_dir)
-                smoothed_files = [f for f in img_files if 'smoothed' in f.lower() and f.endswith('.png')]
-                # No fallar si no hay imágenes
-                # self.assertGreater(len(smoothed_files), 0, "No se generó imagen con 'smoothed' en el nombre")
+            # Verificar que se generó imagen
+            img_files = os.listdir(img_dir)
+            labaells_files = [f for f in img_files if 'labaells' in f.lower() and f.endswith('.png')]
+            self.assertGreater(len(labaells_files), 0,
+                             "No se generó imagen del embalse")
             
             self.__class__.score += 2  # Vale doble
             self.__class__.test_results.append(("Ejecución completa", True, 2))
