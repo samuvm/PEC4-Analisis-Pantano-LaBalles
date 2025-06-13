@@ -39,16 +39,7 @@ PEC4/
 ### Requisitos
 - Python 3.11 o superior
 
-### Opción 1: Instalación con setup.py (Recomendado)
-```bash
-# Clonar o descargar el proyecto
-cd PEC4/
-
-# Instalar con setup.py
-python setup.py install
-```
-
-### Opción 2: Instalación manual
+### Opción 1: Instalación manual con pip
 ```bash
 # Crear entorno virtual (recomendado)
 python -m venv venv
@@ -56,6 +47,16 @@ source venv/bin/activate  # En Windows: venv\Scripts\activate
 
 # Instalar dependencias
 pip install -r requirements.txt
+```
+
+### Opción 2: Instalación automática con setup.py
+```bash
+# Crear entorno virtual (recomendado)
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+
+# Instalar con setup.py
+python setup.py install
 ```
 
 ## 💻 Uso
