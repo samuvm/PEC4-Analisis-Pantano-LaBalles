@@ -105,10 +105,16 @@ def mostrar_informacion(df):
     df.info()
 
 
-def ejecutar_ejercicio1():
+def ejecutar_ejercicio1(df=None):
     """
     Función principal que ejecuta todas las tareas del ejercicio 1.
     
+    Parameters
+    ----------
+    df : pd.DataFrame, optional
+        DataFrame con los datos ya cargados. Si no se proporciona,
+        se cargará el dataset usando la función cargar_dataset().
+        
     Returns
     -------
     pd.DataFrame
@@ -118,9 +124,12 @@ def ejecutar_ejercicio1():
     print("EJERCICIO 1: Carga del dataset y EDA")
     print("="*50)
     
-    # Cargar el dataset
-    df = cargar_dataset()
-    print(f"\nDataset cargado correctamente. Dimensiones: {df.shape}")
+    # Cargar el dataset si no se proporciona
+    if df is None:
+        df = cargar_dataset()
+        print(f"\nDataset cargado correctamente. Dimensiones: {df.shape}")
+    else:
+        print(f"\nDataset proporcionado. Dimensiones: {df.shape}")
     
     # Mostrar las primeras 5 filas
     mostrar_primeras_filas(df)
@@ -136,4 +145,4 @@ def ejecutar_ejercicio1():
 
 if __name__ == "__main__":
     # Si se ejecuta este archivo directamente, ejecutar el ejercicio
-    ejecutar_ejercicio1()
+    df = ejecutar_ejercicio1()
